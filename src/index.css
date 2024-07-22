@@ -1,3 +1,24 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body{
+    background-color: #212529;
+    color: white;
+}
+
+button {
+    padding: 0.6em 1em;
+    border: 4px solid #fc575cdd;
+    transition: ease-in-out 0.3s;
+    background-color: transparent;
+    color: #fa725a;
+    font-weight: bolder;
+    font-size: 16px;
+   }
+   
+   button:hover {
+    transform: scale(1.2) rotate(10deg);
+    background-color: #fc575cdd;
+    color: white;
+   }
