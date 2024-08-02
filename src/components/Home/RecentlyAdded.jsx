@@ -1,6 +1,8 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import BookCart from "../BookCart/BookCart";
+import Loader from "../Loader/Loader";
+import { API_BASE_URL } from "../../config/configApi";
 
 const RecentlyAdded = () => {
   const [Data, setData] = useState();
@@ -8,7 +10,7 @@ const RecentlyAdded = () => {
   useEffect(() => {
     const fetchData = async () => {
       const response = await axios.get(
-        "http://localhost:1000/admin/recentbooks"
+        `${API_BASE_URL}admin/recentbooks`
       );
       setData(response.data.recentBooks);
     };
@@ -17,8 +19,9 @@ const RecentlyAdded = () => {
 
   return (
     <div>
-      <div className="mt-8 border border-green-500 p-8 bg-gray-600">
-        <h1 className="text-3xl text-[#fc575cdd]">Recently Added Books</h1>
+      <div className="m-auto mt-8 border rounded-lg border-green-500 p-8 bg-gray-600">
+        <h1 className="text-3xl font-family: 'Dancing Script', cursive underline">Recently Added Books</h1>
+        {!Data && ( <div className="flex justify-center items-center"><Loader/></div>)}
         <div className="my-4 text-white grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
           {Data &&
             Data?.map((items, i) => (

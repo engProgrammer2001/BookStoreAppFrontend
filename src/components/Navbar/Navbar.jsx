@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { FaGripLines } from "react-icons/fa";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -14,9 +15,16 @@ const Navbar = () => {
     { name: "Contact", path: "/contact" },
   ];
 
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+
+  if (isLoggedIn === false) {
+    links.splice(3, 2); // it will hide 2 links from index 3
+  }
+
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
+  const username = localStorage.getItem("username");
 
   const handleLinkClick = () => {
     setIsOpen(false);
@@ -25,7 +33,10 @@ const Navbar = () => {
     <div>
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white border-gray-200 dark:bg-gray-900 shadow-lg">
         <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl p-4">
-          <a href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
+          <a
+            href="/"
+            className="flex items-center space-x-3 rtl:space-x-reverse"
+          >
             <img
               src="../../../public/vite.svg"
               className="h-8"
@@ -42,18 +53,31 @@ const Navbar = () => {
             >
               (810) 333-4932
             </Link>
-            <Link
-              to="/login"
-              className="text-sm text-[#fc575cdd] dark:text-[#fc575c] hover:underline"
-            >
-              SignIn
-            </Link>
-            <Link
-              to="/register"
-              className="text-sm text-[#fc575cdd] dark:text-[#fc575c] hover:underline "
-            >
-              SignUp
-            </Link>
+            {isLoggedIn ? (
+              <Link
+                to="/profile"
+                className="text-sm dark:text-white hover:underline"
+              >
+                <p className="text-3xl border-2 border-[#ece9e9dd] rounded-full px-2 bg-blue-900">
+                  {username[0].toUpperCase()}
+                </p>
+              </Link>
+            ) : (
+              <>
+                <Link
+                  to="/login"
+                  className="text-sm text-[#fc575cdd] dark:text-[#fc575c] hover:underline"
+                >
+                  SignIn
+                </Link>
+                <Link
+                  to="/register"
+                  className="text-sm text-[#fc575cdd] dark:text-[#fc575c] hover:underline "
+                >
+                  SignUp
+                </Link>
+              </>
+            )}
           </div>
           <button
             className="block md:hidden text-gray-500 dark:text-white"
