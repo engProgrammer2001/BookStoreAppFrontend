@@ -30,21 +30,6 @@ const ViewBookDetails = () => {
     id: localStorage.getItem("id"),
     Authorization: `Bearer ${localStorage.getItem("token")}`,
   };
-  // console.log("headers are: ", headers);
-  const handleFavourite = async () => {
-    try {
-      const response = await axios.put(
-        `${API_BASE_URL}favourite/add/${bookId}`,
-        {}, // Empty object for data payload
-        { headers } // Headers object
-      );
-      alert(response.data.message);
-      console.log("response is: ", response);
-    } catch (error) {
-      console.error("Error: ", error);
-      alert(error.response?.data?.message || "An error occurred");
-    }
-  };
 
   const handleAddToCart = async () => {
     try {
@@ -53,7 +38,23 @@ const ViewBookDetails = () => {
         {},
         { headers }
       );
+      alert("Book Added to Cart");
       console.log("response is: ", response.data);
+    } catch (error) {
+      console.error("Error: ", error);
+      alert(error.response?.data?.message || "An error occurred");
+    }
+  };
+
+  const handleAddToFavourites = async () => {
+    try {
+      const response = await axios.put(
+        `${API_BASE_URL}favourite/add/${bookId}`,
+        {},
+        { headers }
+      );
+      alert(response.data.message);
+      console.log("response is: ", response);
     } catch (error) {
       console.error("Error: ", error);
       alert(error.response?.data?.message || "An error occurred");
@@ -102,16 +103,16 @@ const ViewBookDetails = () => {
 
           {/* if user will be login then both button will be shown other wise it will be hidden and role should be user*/}
           {isLoggedIn && role === "user" && (
-            <div
-              onClick={handleAddToCart}
-              className="flex flex-col md:flex-row justify-between gap-4 py-5"
-            >
-              <Link className="flex items-center justify-center border border-green-500 py-2 px-4 md:px-8 rounded-full bg-yellow-400 text-black text-center">
+            <div className="flex flex-col md:flex-row justify-between gap-4 py-5">
+              <Link
+                onClick={handleAddToCart}
+                className="flex items-center justify-center border border-green-500 py-2 px-4 md:px-8 rounded-full bg-yellow-400 text-black text-center"
+              >
                 <span className="mr-2">Add to Cart</span>
                 <FaCartPlus />
               </Link>
               <Link
-                onClick={handleFavourite}
+                onClick={handleAddToFavourites}
                 className="flex items-center justify-center border border-green-500 py-2 px-4 md:px-8 rounded-full bg-red-400 text-black text-center"
               >
                 <span className="mr-2">Add to Favourites</span>

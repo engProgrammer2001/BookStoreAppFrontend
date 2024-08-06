@@ -17,31 +17,34 @@ const Favourites = () => {
         const response = await axios.get(`${API_BASE_URL}favourite`, {
           headers,
         });
-        console.log("API response:", response.data); // Log the response to check its structure
         const userData = response.data.userData.favourites;
-        console.log("userData is: ", userData);
         // Ensure userData is an array
         setFavouritesBook(Array.isArray(userData) ? userData : []);
       } catch (error) {
         console.error("Error: ", error);
-        alert(error.response?.data?.message || "An error occurred");
+        alert(response?.data?.message || "An error occurred");
       }
     };
     fetch();
-  }, []);
+  }, [favouritesBook]);
 
   return (
-    <div>
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center',  }}>
       <div>
+        {favouritesBook.length === 0 && (
+          <>
+            <img src="/images/Oops.png" alt="No Books" width="300px" height="300px" />
+          </>
+        )}
         {favouritesBook &&
           favouritesBook.map((items, i) => (
             <div key={i}>
-              <FavouritesCart data={items} />
+              <FavouritesCart data={items} favourites={true} />
             </div>
           ))}
       </div>
     </div>
-  );s
+  );
 };
 
 export default Favourites;
