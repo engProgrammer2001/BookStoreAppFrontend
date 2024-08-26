@@ -31,6 +31,7 @@ const Navbar = () => {
     setIsOpen(!isOpen);
   };
 
+  // this is hanndle click function to close the menu
   const handleLinkClick = () => {
     setIsOpen(false);
   };
