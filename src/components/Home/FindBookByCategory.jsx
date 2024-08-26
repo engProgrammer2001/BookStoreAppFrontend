@@ -24,10 +24,10 @@ const FindBookByCategory = () => {
   }, []);
 
   return (
-    <div className="pb-4">
-      <div className='m-auto mt-8 border rounded-lg border-green-500 p-8 bg-gray-600'>
+    <div className="pb-4 m-2">
+      <div className='mx-auto border rounded-lg border-green-500 p-4 bg-gray-600'>
         <div className="mt-8">
-          <h1 className="text-3xl text-[#fc575cdd]">All Children's Story Books</h1>
+          <h1 className="text-3xl text-white underline">All Children's Story Books</h1>
           {!data && (
             <div className="flex justify-center items-center">
               <Loader />

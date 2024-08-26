@@ -1,30 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Loader from "../Loader/Loader";
 import axios from "axios";
 import { MdLanguage } from "react-icons/md";
 import { API_BASE_URL } from "../../config/configApi";
-import { FaHeart } from "react-icons/fa";
+import { FaHeart, FaEdit } from "react-icons/fa";
 import { FaCartPlus } from "react-icons/fa6";
-import { useSelector } from "react-redux";
-import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
+import { useSelector } from "react-redux";
+import SimilarBook from "../SimilarBook/SimilarBook";
 
 const ViewBookDetails = () => {
   const params = useParams();
+  const navigate = useNavigate();
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const role = useSelector((state) => state.auth.role);
-
   const bookId = params.id;
-
   const [Data, setData] = useState();
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await axios.get(`${API_BASE_URL}admin/book/${bookId}`);
-      setData(response.data.book);
-    };
-    fetchData();
-  }, []);
 
   const headers = {
     id: localStorage.getItem("id"),
@@ -33,13 +25,8 @@ const ViewBookDetails = () => {
 
   const handleAddToCart = async () => {
     try {
-      const response = await axios.put(
-        `${API_BASE_URL}cart/add/${bookId}`,
-        {},
-        { headers }
-      );
+      await axios.put(`${API_BASE_URL}cart/add/${bookId}`, {}, { headers });
       alert("Book Added to Cart");
-      console.log("response is: ", response.data);
     } catch (error) {
       console.error("Error: ", error);
       alert(error.response?.data?.message || "An error occurred");
@@ -54,12 +41,37 @@ const ViewBookDetails = () => {
         { headers }
       );
       alert(response.data.message);
-      console.log("response is: ", response);
     } catch (error) {
       console.error("Error: ", error);
       alert(error.response?.data?.message || "An error occurred");
     }
   };
+
+  const handleDeleteBook = async () => {
+    try {
+      const response = await axios.delete(
+        `${API_BASE_URL}admin/delete/books/${bookId}`,
+        { headers }
+      );
+      alert(response.data.message);
+      navigate("/books");
+    } catch (error) {
+      console.log(error);
+      alert(error.response?.data?.message || "An error occurred");
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${API_BASE_URL}admin/book/${bookId}`);
+        setData(response.data.book);
+      } catch (error) {
+        console.error("Error fetching book details: ", error);
+      }
+    };
+    fetchData();
+  }, [bookId]);
 
   return (
     <div className="view-book-details-container mt-32">
@@ -69,14 +81,14 @@ const ViewBookDetails = () => {
         </div>
       )}
       <div className="flex flex-col md:flex-row gap-8 p-4 md:p-8 lg:p-20">
-        <div className="p-4 md:p-8 bg-slate-800 h-[50vh] md:h-screen lg:w-3/6 flex items-center justify-center rounded-lg">
+        <div className="p-4 md:p-8 bg-slate-800 h-[50vh] md:h-[100vh] lg:w-3/6 flex items-center justify-center rounded-lg">
           <img
             className="w-full max-w-xs md:max-w-md h-full lg:w-full lg:max-w-full"
             src={Data?.imageUrl}
-            alt="/"
+            alt={Data?.title}
           />
         </div>
-        <div className="text-white p-4 md:p-8 bg-slate-800 md:w-full lg:w-[50%] h-auto md:h-[100vh] rounded-lg">
+        <div className="text-white p-4 md:p-8 bg-slate-800 md:w-full lg:w-[50%] h-auto md:h-full rounded-lg">
           <h1 className="text-xl md:text-2xl">{Data?.title}</h1>
           <div className="flex flex-col md:flex-row justify-between text-lg md:text-xl text-[#fc575cdd] py-5 font-bold">
             <p>
@@ -101,7 +113,6 @@ const ViewBookDetails = () => {
             <p>{Data?.publishedDate}</p>
           </div>
 
-          {/* if user will be login then both button will be shown other wise it will be hidden and role should be user*/}
           {isLoggedIn && role === "user" && (
             <div className="flex flex-col md:flex-row justify-between gap-4 py-5">
               <Link
@@ -120,14 +131,19 @@ const ViewBookDetails = () => {
               </Link>
             </div>
           )}
-          {/* this is for admin role only */}
           {isLoggedIn && role === "admin" && (
             <div className="flex flex-col md:flex-row justify-between gap-4 py-5">
-              <Link className="flex items-center justify-center border border-green-500 py-2 px-4 md:px-8 rounded-full bg-yellow-400 text-black text-center">
+              <Link
+                to={`/update-book/${bookId}`}
+                className="flex items-center justify-center border border-green-500 py-2 px-4 md:px-8 rounded-full bg-yellow-400 text-black text-center"
+              >
                 <span className="mr-2">Edit Book</span>
                 <FaEdit />
               </Link>
-              <Link className="flex items-center justify-center border border-green-500 py-2 px-4 md:px-8 rounded-full bg-red-400 text-black text-center">
+              <Link
+                onClick={handleDeleteBook}
+                className="flex items-center justify-center border border-green-500 py-2 px-4 md:px-8 rounded-full bg-red-400 text-black text-center"
+              >
                 <span className="mr-2">Delete Book</span>
                 <MdDelete />
               </Link>
@@ -137,6 +153,12 @@ const ViewBookDetails = () => {
             <p>{Data?.description}</p>
           </div>
         </div>
+
+      </div>
+
+      {/* show similar books  */}
+      <div className="p-4">
+          <SimilarBook bookId={bookId} category={Data?.category} />
       </div>
     </div>
   );

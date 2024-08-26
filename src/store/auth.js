@@ -1,4 +1,4 @@
-// reducer is use to manage the state of the application and it's help me to find initial state of the application
+// reducer is used to manage the state of the application and it helps to find the initial state of the application
 
 import { createSlice } from "@reduxjs/toolkit";
 
@@ -7,7 +7,6 @@ const authSlice = createSlice({
   initialState: {
     isLoggedIn: false,
     role: "user",
-    // username: "",
   },
 
   reducers: {
@@ -15,16 +14,13 @@ const authSlice = createSlice({
       state.isLoggedIn = true;
     },
     logout: (state) => {
-      state.isAuthenticated = false;
+      state.isLoggedIn = false; // Correctly update the isLoggedIn state
+      state.role = "guest"; // Optionally reset the role to guest
     },
-    changeRole(state, action) {
+    changeRole: (state, action) => {
       const role = action.payload;
       state.role = role;
     },
-    // userName(state, action) {
-    //   const username = action.payload;
-    //   state.username = username;
-    // },
   },
 });
 

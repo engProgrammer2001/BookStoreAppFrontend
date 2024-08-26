@@ -12,12 +12,12 @@ const Banner = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(`${API_BASE_URL}admin/allbooks`);
-        console.log("API response: ", response.data);
+        // console.log("API response: ", response.data);
         const discountedBooks = response.data.books.filter(
-          (book) => book.discountPercentage > 10
+          (book) => book.discountPercentage > 50
         );
         setImages(discountedBooks);
-        console.log("Discounted books: ", discountedBooks);
+        // console.log("Discounted books: ", discountedBooks);
       } catch (error) {
         console.error("Error fetching data: ", error);
       }

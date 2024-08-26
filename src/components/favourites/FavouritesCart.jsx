@@ -66,7 +66,7 @@ const FavouritesCart = ({ data, favourites }) => {
             <div className="mt-4 md:mt-0 md:ml-auto">
               <Link
                 onClick={handleRemoveBook}
-                className="border border-red-500 p-3 text-red-500 rounded-md flex items-center"
+                className="border border-red-500 p-2 text-red-500 rounded-md flex items-center"
               >
                 Remove From Favourite <MdDeleteForever className="ml-2" />
               </Link>

@@ -33,7 +33,7 @@ const Login = () => {
         dispacth(authActions.changeRole(response.data.data.role));
 
         // store data in localStorage
-        console.log("response is : ", response.data.token);
+        // console.log("response is : ", response.data.token);
         localStorage.setItem("id", response.data.data._id);
         localStorage.setItem("username", response.data.data.username);        
         localStorage.setItem("role", response.data.data.role);

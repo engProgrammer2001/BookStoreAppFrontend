@@ -27,7 +27,7 @@ const Profile = () => {
   return (
     <div className="pt-32">
       <div>
-        <div className="px-2 md:px-12 flex flex-col md:flex-row h-screen py-8 gap-4">
+        <div className="px-2 md:px-12 flex flex-col md:flex-row h-auto py-8 gap-4 ">
           {/* define Loader here  */}
           {!profile && <div className="w-full flex justify-center items-center"> <Loader /></div>}
           {profile && (

@@ -6,29 +6,41 @@ import { useSelector } from "react-redux";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const links = [
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const role = useSelector((state) => state.auth.role);
+  const username = localStorage.getItem("username");
+
+  const commonLinks = [
     { name: "Home", path: "/" },
     { name: "About", path: "/about" },
     { name: "Books", path: "/books" },
-    { name: "Cart", path: "/cart" },
-    { name: "Profile", path: "/profile" },
     { name: "Contact", path: "/contact" },
   ];
 
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const userLinks = [
+    ...commonLinks,
+    { name: "Cart", path: "/cart" },
+    { name: "Profile", path: "/profile" },
+  ];
 
-  if (isLoggedIn === false) {
-    links.splice(3, 2); // it will hide 2 links from index 3
-  }
+  const adminLinks = [...commonLinks, { name: "Admin Profile", path: "/profile" }];
+  
+  const loggedOutLinks = commonLinks;
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
   };
-  const username = localStorage.getItem("username");
 
   const handleLinkClick = () => {
     setIsOpen(false);
   };
+
+  const linksToDisplay = () => {
+    if (isLoggedIn && role === "user") return userLinks;
+    if (isLoggedIn && role === "admin") return adminLinks;
+    return loggedOutLinks;
+  };
+
   return (
     <div>
       <nav className="fixed top-0 left-0 right-0 z-50 bg-white border-gray-200 dark:bg-gray-900 shadow-lg">
@@ -59,7 +71,7 @@ const Navbar = () => {
                 className="text-sm dark:text-white hover:underline"
               >
                 <p className="text-3xl border-2 border-[#ece9e9dd] rounded-full px-2 bg-blue-900">
-                  {username[0].toUpperCase()}
+                  {username[0]?.toUpperCase()}
                 </p>
               </Link>
             ) : (
@@ -94,7 +106,7 @@ const Navbar = () => {
       >
         <div className="max-w-screen-xl px-4 lg:py-3 pt-14 pb-3 mx-auto">
           <div className="flex flex-col md:flex-row md:items-center">
-            {links.map((item, i) => (
+            {linksToDisplay().map((item, i) => (
               <ul
                 className="flex flex-col md:flex-row font-medium mt-0 md:space-x-8 space-y-4 md:space-y-0 rtl:space-x-reverse text-sm"
                 key={i}

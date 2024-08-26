@@ -22,7 +22,7 @@ const Favourites = () => {
         setFavouritesBook(Array.isArray(userData) ? userData : []);
       } catch (error) {
         console.error("Error: ", error);
-        alert(response?.data?.message || "An error occurred");
+        // alert(error.response?.data?.message || "An error occurred");
       }
     };
     fetch();

@@ -1,0 +1,6 @@
+
+
+use video 
+-----------
+
+<video class="full-video" data-mask="3" src="images/hero/web4infotech.mp4" autoplay="" muted="" loop=""></video>

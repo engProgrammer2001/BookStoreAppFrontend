@@ -1,28 +1,46 @@
-import React from 'react'
-import img1 from '../../assets/heroImg/slider1.png'
-import { useNavigate } from 'react-router-dom'
+import React from 'react';
+import 'swiper/css';
+import 'swiper/css/pagination';
+import { useNavigate } from 'react-router-dom';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Scrollbar, A11y, Autoplay } from 'swiper/modules';
 
 const Hero = () => {
   const navigate = useNavigate();
+  const images = [
+    '/images/slider1.png',
+    '/images/slider2.png',
+    '/images/slider3.png',
+  ];
+
   return (
-    <div className='lg:flex justify-center align-center py-40'>
-      <div className="align-center w-[100%] lg:h-[50vh]">
-        <div className="p-8 ">
-          <p className='text-3xl  justify-start'>Wel-Come 📖</p>
-          <h1 className='text-7xl py-4 text-[#fc575cdd] justify-start font-serif'>ECWA BookStore</h1>
-          <p className='  justify-start'>Welcome to ECWA BookStore, your one-stop destination for all your reading needs. Our extensive collection features a wide variety of genres, from classic literature and contemporary fiction to educational textbooks and children's books. Whether you're an avid reader or a casual browser, we offer something for everyone. Explore our user-friendly website to discover new releases, bestsellers, and exclusive deals. At ECWA BookStore, we believe in the power of books to enlighten, entertain, and inspire. Start your literary journey with us today!</p>
-          <div className="btn py-6">
-            <button onClick={() => navigate('/books')} className=''>Explore More Books</button>
-          </div>
-        </div>
-      </div>
-      <div className="text-3xl align-center w-[100%] lg:h-[50vh]">
-        <div className="p-8 ">
-          <img className='rounded-full' src={img1} alt="main Images" />
-        </div>
+    <div className='flex flex-col lg:flex-row justify-center items-center pt-16 lg:w-full lg:py-32'>
+      <div className="w-full lg:w-full lg:h-[70vh]">
+        <Swiper
+          autoplay={{
+            delay: 3000,
+            disableOnInteraction: false,
+          }}
+          navigation
+          pagination={{ clickable: true }}
+          modules={[Navigation, Pagination, Scrollbar, A11y, Autoplay]}
+          spaceBetween={30}
+          slidesPerView={1}
+          className='h-[40vh] sm:h-[50vh] md:h-[60vh] lg:h-[70vh] w-full'
+        >
+          {images.map((image, index) => (
+            <SwiperSlide key={index}>
+              <img 
+                src={image} 
+                alt={`slider ${index + 1}`} 
+                className="w-full h-full object-cover"
+              />
+            </SwiperSlide>
+          ))}
+        </Swiper>
       </div>
     </div>
-  )
+  );
 }
 
-export default Hero
+export default Hero;
